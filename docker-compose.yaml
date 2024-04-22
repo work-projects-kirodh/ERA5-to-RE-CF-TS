@@ -1,0 +1,16 @@
+# docker compose file for running the atlite service
+version: '3.7'
+
+services:
+
+  power:
+    container_name: power
+    build:
+      context: ./dockerfile
+    volumes:
+      - ./src:/src
+      - ./cdsapirc.txt:/root/.cdsapirc
+    ports:
+      - ${POWER_PORT:-8081}:8081
+    #entrypoint: ["python", "power_generation_timeseries_v1.py", "&&","tail", "-f", "/dev/null"]
+    entrypoint: ["./entrypoint.sh"]

@@ -1,0 +1,18 @@
+.git
+
+# cdsapirc key files
+.cdsapirc
+cdsapirc.txt
+
+# output data files
+src/output/*
+src/output*
+
+
+__pycache__/
+.idea
+
+.env
+
+
+

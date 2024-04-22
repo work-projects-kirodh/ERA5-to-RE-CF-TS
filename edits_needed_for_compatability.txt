@@ -1,0 +1,28 @@
+power_generation_timeseries_v1.py:
+
+- import func6_cap_fact_timeseries_v0 as cap_fact_timeseries
+needs to change to import func6_cap_fact_timeseries_v1 as cap_fact_timeseries
+
+-     ## filename
+This line needs to be a bit more descriptive of what file type needs to go in here
+
+- make a requirements.txt file for the user, so its an easy install
+
+pip install atlite
+conda install matplotlib
+conda install cartopy
+pip install pvlib
+
+
+- In case of problems installing atlite because of rasterio, GDAL needs to be installed on windows, rather, use the conda installation, not the pip, then it works
+
+- put the import geopandas as gpd statement as the last import statement, otherwise crs projection errors, important which module loads first
+- may need to do the same for cutout.py in the atlite package for some systems.
+
+- there is unknown user input in func6_cap_fact_timeseries_v1.py
+input_file = 'SA_test_1_interpolated_data.nc'
+output_directory = 'hourly_output'
+ 
+
+
+
