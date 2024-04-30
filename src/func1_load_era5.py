@@ -15,8 +15,25 @@ Created on Fri May 19 11:15:52 2023
 #       2.4 Paste the text that you already mentioned (key, etc).
 #       2.5 Save and close the document.
 
-import cdsapi
 import os
+
+## read cdsapirc file locally
+# Get the directory of your Python file
+current_dir = os.path.dirname(os.path.abspath(__file__))
+
+# Construct the path to your .cdsapirc file relative to the current directory
+cdsapirc_path = os.path.join(current_dir, '../cdsapirc.txt')
+
+# Check if the file exists
+if os.path.exists(cdsapirc_path):
+    # Set the environment variable
+    os.environ['CDSAPI_RC'] = cdsapirc_path
+else:
+    raise FileNotFoundError("cdsapirc.txt file not found. Please make sure it exists.")
+
+
+# then import the file
+import cdsapi
 
 def main(time, date, location, fnm, directory):
 
