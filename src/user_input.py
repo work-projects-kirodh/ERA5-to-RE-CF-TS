@@ -12,8 +12,8 @@ Author Kirodh Boodhraj
 
 ## ERA5 output folder names and filename prefix, change everytime you need a new file, otherwise it uses previous file
 # filename = ['SA_test_1','SA_test_2']
-filename = ['output_month_9_Jan_2023']
-#filename = ['output_temp']
+#filename = ['output_month_9_Jan_2023']
+filename = ['output']
 
 ## Visualise results set plotting: True or False
 plotting = False #True

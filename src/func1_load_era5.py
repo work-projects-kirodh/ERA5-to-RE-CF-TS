@@ -29,7 +29,13 @@ if os.path.exists(cdsapirc_path):
     # Set the environment variable
     os.environ['CDSAPI_RC'] = cdsapirc_path
 else:
-    raise FileNotFoundError("cdsapirc.txt file not found. Please make sure it exists.")
+    cdsapirc_path = os.path.join(current_dir, 'cdsapirc.txt')
+    if os.path.exists(cdsapirc_path):
+        # Set the environment variable
+        os.environ['CDSAPI_RC'] = cdsapirc_path
+    else:
+        print(cdsapirc_path)
+        raise FileNotFoundError("cdsapirc.txt file not found. Please make sure it exists.")
 
 
 # then import the file
