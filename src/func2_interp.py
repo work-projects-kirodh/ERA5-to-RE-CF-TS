@@ -7,6 +7,7 @@ import numpy as np
 import pyproj
 import pickle 
 import pandas as pd
+import matplotlib.pyplot as plt
 
 # def main():
     # f = "download_201911.nc"
@@ -19,15 +20,32 @@ def get_data(f, resolution):
     lat = dataset['latitude'].data
     time = dataset['time'] ## keep as xarray.core
     
+    ## plot z_before
+    z_init = dataset['z'].data[0,:,:]
+    plt.imshow(z_init, interpolation='none', extent=[np.min(lon),np.max(lon),np.min(lat),np.max(lat)])
+    plt.colorbar()
+    plt.xlabel('Longitude')
+    plt.ylabel('Latitude')
+    plt.show()
+    
     #resolution = [res]     # 5km/40000km * 360 degrees
     
     data_dict = krigPy(resolution,lat,lon,f,downloadfile=False,output_file="download.pkl")
     
     data_dict['time'] = time
     
+    ## plot z after
+    lat_intp = data_dict['lat']
+    lon_intp = data_dict['lon']
+    z_fin = data_dict['z'].data[0,:,:]
+    plt.imshow(z_fin, interpolation='none', extent=[np.min(lon_intp),np.max(lon_intp),np.min(lat_intp),np.max(lat_intp)])
+    plt.colorbar()
+    plt.xlabel('Longitude')
+    plt.ylabel('Latitude')
+    plt.show()
+    
     return data_dict
-    
-    
+        
     
 def krigPy(resolution,lat,lon,ncfile,downloadfile=True,output_file="download.pkl"):
 
@@ -53,11 +71,11 @@ def krigPy(resolution,lat,lon,ncfile,downloadfile=True,output_file="download.pkl
     transformer = pyproj.Transformer.from_crs(datum, projection, always_xy=True)
     
     new_lon = np.arange(lon.min(), lon.max(), resolution)   # Adjust the number of points as needed
-    new_lat = np.arange(lat.min(), lat.max(), resolution)
-    
+    new_lat = np.arange(lat.max(), lat.min(), -resolution)
+        
     new_lon_grid, new_lat_grid = np.meshgrid(new_lon, new_lat)
     
-    points1 = np.array([(xi, yi) for xi in lon for yi in lat])
+    points1 = np.array([(xi, yi) for yi in lat for xi in lon])
     # grid_points = np.column_stack((lon.ravel(), lat.ravel()))
     # new_grid_points = np.column_stack((new_lon_grid.ravel(), new_lat_grid.ravel()))
     tolerance = 1e-10
@@ -91,7 +109,7 @@ def krigPy(resolution,lat,lon,ncfile,downloadfile=True,output_file="download.pkl
                     )
                 else:
                     # print('else')
-                    kriging_model = OrdinaryKriging(points1[:, 0],points1[:, 1],t1[::-1], variogram_model='spherical', verbose=False, enable_plotting=False)
+                    kriging_model = OrdinaryKriging(points1[:, 0],points1[:, 1],t1, variogram_model='linear', verbose=False, enable_plotting=False)
 
                     z, ss = kriging_model.execute('grid', new_lon, new_lat)
                     
